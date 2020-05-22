@@ -1,6 +1,7 @@
 import arrow
 import os
 import shutil
+import re
 from video_utility import extract_thumbnail, video_rotate_executer
 
 
@@ -15,6 +16,9 @@ def daily_take_in(base_dir, rotate_type):
 
     current_task_folder_list = set()
     for i in [i for i in os.listdir(base_dir) if os.path.isfile(i)]:
+        if re.match(r".ds", i.lower()):
+            os.remove(i)
+            continue
         to_folder = arrow.get(i.split('_')[0]).format('YYYY[年]MM[月]DD[日]_dddd', locale='zh')
         current_task_folder_list.add(to_folder)
         if not os.path.exists(to_folder):
