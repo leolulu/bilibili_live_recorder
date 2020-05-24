@@ -13,7 +13,8 @@ def test():
 
 def runtime_listener(event):
     if event.code == EVENT_JOB_EXECUTED:
-        print(arrow.now().format(), '任务运行成功...')
+        if event.job_id == 'bilibili_take_in':
+            print(arrow.now().format(), '任务运行成功...')
     elif event.code == EVENT_JOB_ERROR:
         print(arrow.now().format(), '出错了，原因如下：')
         print(event.exception)
@@ -23,17 +24,17 @@ def runtime_listener(event):
 
 def print_job(scheduler):
     for job_ in scheduler.get_jobs():
-        print(job_)
-        if job_.name == 'bilibili_take_in':
+        # print(job_)
+        if job_.id == 'bilibili_take_in':
             print('下一次整理时间：', arrow.get(job_.next_run_time).humanize(locale='zh'))
 
 
 cron_bilibili_take_in = CronTrigger(hour='5')
-corn_print_job = CronTrigger(hour='*/1', jitter=3600)
+corn_print_job = CronTrigger(hour='*/6', jitter=3600)
 
 scheduler = BlockingScheduler()
 scheduler.add_listener(runtime_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR | EVENT_JOB_MISSED)
-scheduler.add_job(daily_take_in, cron_bilibili_take_in, [r"C:\LiveRecord\22128636", 'metadata'], coalesce=True, misfire_grace_time=60, name='bilibili_take_in')
+scheduler.add_job(daily_take_in, cron_bilibili_take_in, [r"C:\LiveRecord\22128636", 'metadata'], coalesce=True, misfire_grace_time=60, id='bilibili_take_in')
 scheduler.add_job(print_job, corn_print_job, (scheduler,))
 
 print('begin: ', arrow.now())
