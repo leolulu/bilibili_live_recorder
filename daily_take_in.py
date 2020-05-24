@@ -52,5 +52,5 @@ def daily_take_in(base_dir, rotate_type):
 
 
 if __name__ == "__main__":
-    base_dir = r"C:\LiveRecords\22128636"
+    base_dir = r"C:\LiveRecord\22128636"
     daily_take_in(base_dir, 'metadata')
