@@ -14,7 +14,7 @@ def test():
 def runtime_listener(event):
     if event.code == EVENT_JOB_EXECUTED:
         if event.job_id == 'bilibili_take_in':
-            print(arrow.now().format(), '任务运行成功...')
+            print(arrow.now().format(), f'{event.job_id} 任务运行成功...')
     elif event.code == EVENT_JOB_ERROR:
         print(arrow.now().format(), '出错了，原因如下：')
         print(event.exception)
