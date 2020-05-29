@@ -30,7 +30,7 @@ def print_job(scheduler):
 
 
 cron_bilibili_take_in = CronTrigger(hour='5')
-corn_print_job = CronTrigger(hour='*/6', jitter=3600)
+corn_print_job = CronTrigger(hour='*/17', jitter=3600)
 
 scheduler = BlockingScheduler()
 scheduler.add_listener(runtime_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR | EVENT_JOB_MISSED)
