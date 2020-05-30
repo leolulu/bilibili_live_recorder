@@ -35,7 +35,7 @@ corn_print_job = CronTrigger(hour='*/17', jitter=3600)
 scheduler = BlockingScheduler()
 scheduler.add_listener(runtime_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR | EVENT_JOB_MISSED)
 scheduler.add_job(daily_take_in, cron_bilibili_take_in, [r"C:\LiveRecord\22128636", 'metadata'], coalesce=True, misfire_grace_time=60, id='bilibili_take_in')
-scheduler.add_job(print_job, corn_print_job, (scheduler,))
+scheduler.add_job(print_job, corn_print_job, (scheduler,), misfire_grace_time=60)
 
 print('begin: ', arrow.now())
 scheduler.start()
