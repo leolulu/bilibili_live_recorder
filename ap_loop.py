@@ -4,12 +4,22 @@ from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR, EVENT_JOB_MI
 import arrow
 from daily_take_in import daily_take_in
 from del_empty_folder import del_empty_folder
+from qbittrent_api import QbittrentClient
 
 
 def test():
     print('test:', arrow.now())
     if arrow.now().format('ss')[-1] == '0':
         raise UserWarning('自定义错误')
+
+
+def resume_torrent():
+    api = QbittrentClient()
+    api.login()
+    has_error = api.resume_torrent()
+    api.logout()
+    if has_error:
+        api.sent_to_server_chan()
 
 
 def runtime_listener(event):
@@ -33,12 +43,14 @@ def print_job(scheduler):
 cron_bilibili_take_in = CronTrigger(hour='5')
 corn_print_job = CronTrigger(hour='*/17', jitter=3600)
 corn_del_empty_folder = CronTrigger(minute='*/5')
+corn_del_resume_torrent = CronTrigger(minute='*/10')
 
 scheduler = BlockingScheduler()
 scheduler.add_listener(runtime_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR | EVENT_JOB_MISSED)
 scheduler.add_job(daily_take_in, cron_bilibili_take_in, [r"C:\LiveRecord\22128636", 'metadata'], coalesce=True, misfire_grace_time=60, id='bilibili_take_in')
 scheduler.add_job(print_job, corn_print_job, (scheduler,), misfire_grace_time=60)
 scheduler.add_job(del_empty_folder, corn_del_empty_folder, [r"C:\BaiduNetdiskDownload"], misfire_grace_time=5)
+scheduler.add_job(resume_torrent, corn_del_resume_torrent,  misfire_grace_time=10)
 
 print('begin: ', arrow.now())
 scheduler.start()
