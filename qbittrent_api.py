@@ -78,7 +78,7 @@ class QbittrentClient:
                 params = {'hashes': error_torrent['hash']}
                 r = requests.get(url, cookies=self.cookies, headers=self.headers, params=params)
                 if r.status_code != 200:
-                    self._print('torrent失败，返回码：{}...'.format(r.status_code))
+                    self._print('恢复torrent失败，返回码：{}...'.format(r.status_code))
                 elif r.status_code == 200:
                     self._print('恢复成功：{}'.format(error_torrent['name'],))
             if error_torrents:

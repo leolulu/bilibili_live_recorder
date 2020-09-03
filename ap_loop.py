@@ -1,10 +1,28 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
+from apscheduler.triggers.interval import IntervalTrigger
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR, EVENT_JOB_MISSED
 import arrow
 from daily_take_in import daily_take_in
 from del_empty_folder import del_empty_folder
 from qbittrent_api import QbittrentClient
+
+
+class Counter:
+    def __init__(self):
+        self.init_minutes = 10
+        self.increase_ratio = 1.5131
+        self.increase_times = 0
+        self.interval_minutes = self.init_minutes
+
+    def time_multiplicate(self):
+        if self.increase_times <= 12:
+            self.interval_minutes *= self.increase_ratio
+            self.increase_times += 1
+
+    def time_reset(self):
+        self.interval_minutes = self.init_minutes
+        self.increase_times = 0
 
 
 def test():
@@ -13,13 +31,18 @@ def test():
         raise UserWarning('自定义错误')
 
 
-def resume_torrent():
+def resume_torrent(scheduler, counter: Counter):
+    # scheduler.get_jobs()[0].trigger.interval.total_seconds()//60
     api = QbittrentClient()
     api.login()
     has_error = api.resume_torrent()
     api.logout()
     if has_error:
         api.sent_to_server_chan()
+        counter.time_reset()
+    else:
+        counter.time_multiplicate()
+    scheduler.modify_job('resume_torrent', minutes=counter.interval_minutes)
 
 
 def runtime_listener(event):
@@ -41,16 +64,18 @@ def print_job(scheduler):
 
 
 cron_bilibili_take_in = CronTrigger(hour='5')
+del_resume_torrent_counter = Counter()
 corn_print_job = CronTrigger(hour='*/17', jitter=3600)
 corn_del_empty_folder = CronTrigger(minute='*/5')
-corn_del_resume_torrent = CronTrigger(hour='*/4', minute='23')
+corn_del_resume_torrent = IntervalTrigger(minutes=del_resume_torrent_counter.interval_minutes)
+
 
 scheduler = BlockingScheduler()
 scheduler.add_listener(runtime_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR | EVENT_JOB_MISSED)
 scheduler.add_job(daily_take_in, cron_bilibili_take_in, [r"C:\LiveRecord\22128636", 'metadata'], coalesce=True, misfire_grace_time=60, id='bilibili_take_in')
 scheduler.add_job(print_job, corn_print_job, (scheduler,), misfire_grace_time=60)
 scheduler.add_job(del_empty_folder, corn_del_empty_folder, [r"C:\BaiduNetdiskDownload"], misfire_grace_time=5)
-scheduler.add_job(resume_torrent, corn_del_resume_torrent,  misfire_grace_time=10)
+scheduler.add_job(resume_torrent, corn_del_resume_torrent, [scheduler, del_resume_torrent_counter], misfire_grace_time=10, id='resume_torrent')
 
 print('begin: ', arrow.now())
 scheduler.start()
