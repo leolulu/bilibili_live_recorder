@@ -43,7 +43,7 @@ def resume_torrent(scheduler, counter: Counter):
     else:
         counter.time_multiplicate()
     # scheduler.modify_job('resume_torrent', minutes=counter.interval_minutes)
-    scheduler.modify_job('resume_torrent', trigger=IntervalTrigger(minutes=counter.interval_minutes))
+    scheduler.reschedule_job('resume_torrent', trigger=IntervalTrigger(minutes=counter.interval_minutes))
 
 
 def runtime_listener(event):
