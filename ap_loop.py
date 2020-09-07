@@ -34,6 +34,7 @@ def test():
 def resume_torrent(scheduler, counter: Counter):
     # scheduler.get_jobs()[0].trigger.interval.total_seconds()//60
     api = QbittrentClient()
+    print(arrow.now().format(), '登陆了Qbittrent...')
     api.login()
     has_error = api.resume_torrent()
     api.logout()
