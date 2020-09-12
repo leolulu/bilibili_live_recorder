@@ -8,6 +8,7 @@ class QbittrentClient:
         self.set_url_type('remote')
         self.headers = {'Referer': self.base_url}
         self.log = ''
+        self.cookies = None
 
     def _print(self, *args):
         print(*args)
@@ -83,6 +84,21 @@ class QbittrentClient:
                     self._print('恢复成功：{}'.format(error_torrent['name'],))
             if error_torrents:
                 return 'not empty'
+
+    def add_torrent(self, magnet: str, category: str = 'hacg'):
+        url = urljoin(self.base_url, '/api/v2/torrents/add')
+        if self.cookies:
+            data = {
+                'urls': magnet,
+                'category': category
+            }
+            r = requests.post(url, data=data, cookies=self.cookies, headers=self.headers)
+            if r.status_code != 200:
+                self._print('任务添加失败，返回码：{}...'.format(r.status_code))
+                return str(r.status_code)
+            elif r.status_code == 200:
+                self._print('任务添加成功：{}'.format(magnet))
+                return 'success'
 
 
 if __name__ == "__main__":
