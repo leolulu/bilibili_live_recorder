@@ -7,7 +7,7 @@ def del_empty_folder(folder_path):
     nonempty_folder_count = 0
     for i in os.listdir(folder_path):
         i = os.path.join(folder_path, i)
-        if re.match(r"^\.", os.path.basename(i).lower()) and os.path.isfile(i):
+        if i.find('OneDrive') == -1 and re.match(r"^\.", os.path.basename(i).lower()) and os.path.isfile(i):
             os.remove(i)
             print('删除隐藏文件：', i)
             continue
