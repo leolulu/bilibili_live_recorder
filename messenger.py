@@ -1,4 +1,5 @@
 import requests
+import sys
 
 
 def server_chan_sender(title: str, content: str) -> str:
@@ -32,4 +33,5 @@ def ijingniu_sender(title: str, content: str) -> str:
 #     pass
 
 if __name__ == "__main__":
-    ijingniu_sender('title','content')
+    if len(sys.argv) == 3:
+        ijingniu_sender(sys.argv[1], sys.argv[2])
