@@ -49,17 +49,27 @@ class QbittrentClient:
         if r.status_code == 200:
             self._print('成功登出了...')
 
-    def get_torrent_info(self):
+    def get_torrent_list(self):
         url = urljoin(self.base_url, '/api/v2/torrents/info')
         if self.cookies:
             r = requests.get(url, cookies=self.cookies, headers=self.headers)
             if r.status_code != 200:
-                self._print('获取torrent失败，返回码：{}...'.format(r.status_code))
+                self._print('获取torrent列表失败，返回码：{}...'.format(r.status_code))
+                return None
+            return json.loads(r.content)
+
+    def get_torrent_info(self, _hash: str):
+        url = urljoin(self.base_url, '/api/v2/torrents/properties')
+        if self.cookies:
+            params = {'hash': _hash}
+            r = requests.get(url, cookies=self.cookies, headers=self.headers, params=params)
+            if r.status_code != 200:
+                self._print('获取torrent信息失败，返回码：{}...'.format(r.status_code))
                 return None
             return json.loads(r.content)
 
     def get_error_torrent(self):
-        torrent_list = self.get_torrent_info()
+        torrent_list = self.get_torrent_list()
         error_torrents = [
             {
                 'hash': i['hash'],
