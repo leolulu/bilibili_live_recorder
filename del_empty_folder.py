@@ -28,11 +28,12 @@ def specific_extension_file(root_, ext: str):
         raise UserWarning('拓展名需以"."开头!')
     for root_, dirs, files in os.walk(root_):
         for file_ in files:
-            if os.path.splitext(file_)[-1] == ext:
+            if os.path.splitext(file_)[-1].lower() == ext.lower():
                 file_ = os.path.join(root_, file_)
                 os.remove(file_)
-                print('删除：', file_)
+                print('删除文件：', file_)
 
 
 if __name__ == "__main__":
-    del_empty_folder('/Users/Yo/python/.vscode/')
+    specific_extension_file(r"D:\B站已投稿",'.flv')
+    del_empty_folder(r"D:\B站已投稿")
