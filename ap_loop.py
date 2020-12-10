@@ -62,12 +62,14 @@ def print_job(scheduler):
     for job_ in scheduler.get_jobs():
         # print(job_)
         if job_.id == 'bilibili_take_in':
-            print('下一次整理时间：', arrow.get(job_.next_run_time).humanize(locale='zh'))
+            print(arrow.now().format(), '下一次整理录播文件时间：', arrow.get(job_.next_run_time).humanize(locale='zh'))
+        if job_.id == 'resume_torrent':
+            print(arrow.now().format(), '下一次恢复torrent时间：', arrow.get(job_.next_run_time).humanize(locale='zh'))
 
 
 cron_bilibili_take_in = CronTrigger(hour='5')
 del_resume_torrent_counter = Counter()
-corn_print_job = CronTrigger(hour='*/17', jitter=3600)
+corn_print_job = CronTrigger(hour='*/3', jitter=600)
 corn_del_empty_folder = CronTrigger(minute='*/5')
 corn_del_resume_torrent = IntervalTrigger(minutes=del_resume_torrent_counter.interval_minutes)
 
