@@ -9,6 +9,7 @@ from qbittrent_api import QbittrentClient
 
 
 class Counter:
+    BILIBILI_TAKE_IN_COUNTER = 0
     def __init__(self):
         self.init_minutes = 10
         self.increase_ratio = 1.5131
@@ -62,14 +63,16 @@ def print_job(scheduler):
     for job_ in scheduler.get_jobs():
         # print(job_)
         if job_.id == 'bilibili_take_in':
-            print(arrow.now().format(), '下一次整理录播文件时间：', arrow.get(job_.next_run_time).humanize(locale='zh'))
+            Counter.BILIBILI_TAKE_IN_COUNTER += 1
+            if Counter.BILIBILI_TAKE_IN_COUNTER % 4 == 0:
+                print(arrow.now().format(), '下一次整理录播文件时间：', arrow.get(job_.next_run_time).humanize(locale='zh'))
         if job_.id == 'resume_torrent':
             print(arrow.now().format(), '下一次恢复torrent时间：', arrow.get(job_.next_run_time).humanize(locale='zh'))
 
 
 cron_bilibili_take_in = CronTrigger(hour='5')
 del_resume_torrent_counter = Counter()
-corn_print_job = CronTrigger(hour='*/3', jitter=600)
+corn_print_job = CronTrigger(hour='*/3')
 corn_del_empty_folder = CronTrigger(minute='*/5')
 corn_del_resume_torrent = IntervalTrigger(minutes=del_resume_torrent_counter.interval_minutes)
 
