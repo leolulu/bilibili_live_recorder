@@ -5,10 +5,10 @@ import re
 from video_utility import extract_thumbnail, video_rotate_executer
 
 
-def daily_take_in(base_dir, rotate_type):
+def daily_take_in(base_dir, rotate_type=None):
     '''rotate_type只能为"both","metadata","transposed"其中之一
     '''
-    if rotate_type not in ['both', 'metadata', 'transposed']:
+    if rotate_type and rotate_type not in ['both', 'metadata', 'transposed']:
         raise UserWarning('rotate_type只能为"both","metadata","transposed"其中之一')
     flv_store_folder_name = 'FLVs'
     xml_store_folder_name = 'XMLs'
@@ -47,8 +47,9 @@ def daily_take_in(base_dir, rotate_type):
                     file_in_day,
                     formated_name
                 )
-                metadata_to_name, transpose_to_name = video_rotate_executer(formated_name, rotate_type)
-                extract_thumbnail(metadata_to_name if metadata_to_name is not None else transpose_to_name)
+                if rotate_type:
+                    metadata_to_name, transpose_to_name = video_rotate_executer(formated_name, rotate_type)
+                    extract_thumbnail(metadata_to_name if metadata_to_name is not None else transpose_to_name)
 
 
 if __name__ == "__main__":
