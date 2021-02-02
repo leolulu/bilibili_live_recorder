@@ -5,7 +5,7 @@ import json
 
 class QbittrentClient:
     def __init__(self):
-        self.set_url_type('remote')
+        self.set_url_type('local')
         self.headers = {'Referer': self.base_url}
         self.log = ''
         self.cookies = None
@@ -28,7 +28,7 @@ class QbittrentClient:
         if type not in ['local', 'remote']:
             raise UserWarning("urltype只能为'local'或'remote'...")
         elif type == 'local':
-            self.base_url = 'http://127.0.0.1:8484'
+            self.base_url = 'http://127.0.0.1:8998'
         elif type == 'remote':
             self.base_url = 'http://132.232.0.240:20004'
 
