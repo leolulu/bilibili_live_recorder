@@ -83,7 +83,7 @@ scheduler.add_listener(runtime_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR | 
 scheduler.add_job(daily_take_in, cron_bilibili_take_in, [r"C:\LiveRecord\22128636"], coalesce=True, misfire_grace_time=60, id='bilibili_take_in')
 scheduler.add_job(print_job, corn_print_job, (scheduler,), misfire_grace_time=60)
 scheduler.add_job(del_empty_folder, corn_del_empty_folder, [r"C:\BaiduNetdiskDownload"], misfire_grace_time=5)
-scheduler.add_job(resume_torrent, corn_del_resume_torrent, [scheduler, del_resume_torrent_counter], misfire_grace_time=10, id='resume_torrent')
+# scheduler.add_job(resume_torrent, corn_del_resume_torrent, [scheduler, del_resume_torrent_counter], misfire_grace_time=10, id='resume_torrent')
 
 print('begin: ', arrow.now())
 scheduler.start()
