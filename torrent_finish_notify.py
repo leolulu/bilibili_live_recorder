@@ -8,7 +8,7 @@ from qbittrent_api import QbittrentClient
 from generic_util import get_time_diff
 
 
-def torrent_finish_notify(_hash):
+def torrent_finish_notify(_hash, addl_msg=None):
     api = QbittrentClient()
     api.login()
     torrent_list = api.get_torrent_list(_hash)
@@ -34,6 +34,9 @@ def torrent_finish_notify(_hash):
     time_elapsed = torrent_info['time_elapsed']
     time_elapsed_diff = get_time_diff(arrow.now()-timedelta(seconds=time_elapsed))
     message += f'总耗时:\n{time_elapsed_diff}'
+
+    if addl_msg:
+        message += f'\n\n额外信息:\n{addl_msg}'
 
     api.logout()
 

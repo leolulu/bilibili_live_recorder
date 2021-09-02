@@ -30,7 +30,7 @@ class QbittrentClient:
         elif type == 'local':
             self.base_url = 'http://127.0.0.1:8998'
         elif type == 'remote':
-            self.base_url = 'http://132.232.0.240:20004'
+            self.base_url = 'http://42.193.43.79:20005'
 
     def login(self):
         params = {'username': 'btbtbt', 'password': 'btbtbt'}
