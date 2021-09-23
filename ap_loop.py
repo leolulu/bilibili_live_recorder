@@ -1,10 +1,12 @@
+import arrow
+from apscheduler.events import EVENT_JOB_ERROR, EVENT_JOB_EXECUTED, EVENT_JOB_MISSED
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
-from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR, EVENT_JOB_MISSED
-import arrow
+
 from daily_take_in import daily_take_in
 from del_empty_folder import del_empty_folder
+from live_video_transform import search_flv_transform
 from qbittrent_api import QbittrentClient
 
 
@@ -71,7 +73,8 @@ def print_job(scheduler):
             print(arrow.now().format(), '下一次恢复torrent时间：', arrow.get(job_.next_run_time).humanize(locale='zh'))
 
 
-cron_bilibili_take_in = CronTrigger(hour='5')
+# cron_bilibili_take_in = CronTrigger(hour='5')
+cron_search_flv_transform = CronTrigger(hour='4')
 del_resume_torrent_counter = Counter()
 corn_print_job = CronTrigger(hour='*/3')
 corn_del_empty_folder = CronTrigger(minute='*/5')
@@ -80,9 +83,10 @@ corn_del_resume_torrent = IntervalTrigger(minutes=del_resume_torrent_counter.int
 
 scheduler = BlockingScheduler()
 scheduler.add_listener(runtime_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR | EVENT_JOB_MISSED)
-scheduler.add_job(daily_take_in, cron_bilibili_take_in, [r"C:\LiveRecord\22128636", 'metadata'], coalesce=True, misfire_grace_time=60, id='bilibili_take_in')
-scheduler.add_job(print_job, corn_print_job, (scheduler,), misfire_grace_time=60)
-scheduler.add_job(del_empty_folder, corn_del_empty_folder, [r"C:\btdownload"], misfire_grace_time=5)
+# scheduler.add_job(daily_take_in, cron_bilibili_take_in, [r"C:\LiveRecord\22128636", 'metadata'], coalesce=True, misfire_grace_time=60, id='bilibili_take_in')
+scheduler.add_job(search_flv_transform, cron_search_flv_transform, [r"Y:\22128636-OakNose"], coalesce=True, misfire_grace_time=60)
+scheduler.add_job(print_job, corn_print_job, (scheduler,), coalesce=True, misfire_grace_time=60)
+# scheduler.add_job(del_empty_folder, corn_del_empty_folder, [r"C:\btdownload"], misfire_grace_time=5)
 # scheduler.add_job(resume_torrent, corn_del_resume_torrent, [scheduler, del_resume_torrent_counter], misfire_grace_time=10, id='resume_torrent')
 
 print('begin: ', arrow.now())
