@@ -39,6 +39,7 @@ def video_transform(input_video_path):
 
 def check_idle():
     cpu_usage = []
+    psutil.cpu_percent()
     for _ in range(10):
         cpu_usage.append(psutil.cpu_percent(360))
     avg_cpu_usage = sum(cpu_usage) / len(cpu_usage)
