@@ -9,7 +9,7 @@ def video_transform(input_video_path):
     input_video_path_without_ext = os.path.splitext(input_video_path)[0]
     vtemp_file_path = input_video_path_without_ext + '_vtemp.mp4'
     atemp_file_path = input_video_path_without_ext + '_atemp.aac'
-    output_video_path = input_video_path + '.mp4'
+    output_video_path = input_video_path_without_ext + '.mp4'
 
     video_extract_audio_command = f'ffmpeg -i "{input_video_path}" -vn -sn -c:a copy -y -map 0:a:0 "{atemp_file_path}"'
     print(f"1.运行指令：{video_extract_audio_command}")
