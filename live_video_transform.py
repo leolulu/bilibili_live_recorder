@@ -52,16 +52,17 @@ def check_idle():
         return True
 
 
-def search_flv_transform(folder_path):
+def search_flv_transform(*folder_paths):
     if not check_idle():
         return
-    folder_path = os.path.abspath(folder_path)
-    for file_name in os.listdir(folder_path):
-        if not os.path.splitext(file_name)[-1] == '.flv':
-            continue
-        file_abs_file = os.path.join(folder_path, file_name)
-        if video_transform(file_abs_file):
-            os.remove(file_abs_file)
+    for folder_path in folder_paths:
+        folder_path = os.path.abspath(folder_path)
+        for file_name in os.listdir(folder_path):
+            if not os.path.splitext(file_name)[-1] == '.flv':
+                continue
+            file_abs_file = os.path.join(folder_path, file_name)
+            if video_transform(file_abs_file):
+                os.remove(file_abs_file)
 
 
 if __name__ == '__main__':
