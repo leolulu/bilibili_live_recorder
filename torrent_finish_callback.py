@@ -35,7 +35,7 @@ def gen_at_job(name, category, org_folder_path) ->str:
     recycle_bin_target_path = os.path.join(recycle_bin_path, target_name)
     message = []
 
-    command = 'mv "{}" "{}"'.format(source_path, recycle_bin_target_path)
+    command = r'mv \"{}\" \"{}\"'.format(source_path, recycle_bin_target_path)
     at_command = 'echo "{}" | at now +21 days'.format(command)
     p = subprocess.Popen(at_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     p.wait()
