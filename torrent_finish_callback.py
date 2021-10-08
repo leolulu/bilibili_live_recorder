@@ -26,19 +26,27 @@ def torrent_finish_callback(_hash):
     ijingniu_sender("下载完成", torrent_finish_notify(_hash, message))
 
 
-def gen_at_job(name, category, org_folder_path):
+def gen_at_job(name, category, org_folder_path) ->str:
     target_folder_path = '/mnt/0DB8/share已完成/'
-    target_name = '{}---{}'.format(category, name)
-    target_path = os.path.join(target_folder_path, target_name)
+    recycle_bin_path = '/mnt/0DB8/share已完成/回收站/'
     source_path = os.path.join(org_folder_path, name)
+    target_name = '{}==》{}'.format(category, name)
+    target_path = os.path.join(target_folder_path, target_name)
+    recycle_bin_target_path = os.path.join(recycle_bin_path, target_name)
+    message = []
 
-    command = 'mv "{}" "{}"'.format(source_path, target_path)
-    at_command = 'echo "{}" | at now +7 days'.format(command)
-
+    command = 'mv "{}" "{}"'.format(source_path, recycle_bin_target_path)
+    at_command = 'echo "{}" | at now +21 days'.format(command)
     p = subprocess.Popen(at_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     p.wait()
-    message = f'at执行信息:\n{p.stderr.read().decode()}'
-    return message
+    message.append(f'at执行信息:\n{p.stderr.read().decode()}')
+
+    command = 'cp -r -v "{}" "{}"'.format(source_path, target_path)
+    p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p.wait()
+    message.append(f'即时复制执行信息:\n{p.stdout.read().decode()}')
+
+    return '\n'.join(message)
 
 
 if __name__ == '__main__':
