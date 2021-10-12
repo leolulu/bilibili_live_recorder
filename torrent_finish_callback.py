@@ -46,7 +46,7 @@ def gen_at_job(name, category, org_folder_path) ->str:
     p.wait()
     message.append(f'即时复制执行信息:\n{p.stdout.read().decode()}')
 
-    return '\n'.join(message)
+    return '\n'.join(message).replace("'",' ')
 
 
 if __name__ == '__main__':
