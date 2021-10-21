@@ -26,7 +26,7 @@ def torrent_finish_callback(_hash):
     ijingniu_sender("下载完成", torrent_finish_notify(_hash, message))
 
 
-def gen_at_job(name, category, org_folder_path) ->str:
+def gen_at_job(name, category, org_folder_path) -> str:
     target_folder_path = '/mnt/0DB8/share已完成/'
     recycle_bin_path = '/mnt/0DB8/share已完成/回收站/'
     source_path = os.path.join(org_folder_path, name)
@@ -35,7 +35,8 @@ def gen_at_job(name, category, org_folder_path) ->str:
     recycle_bin_target_path = os.path.join(recycle_bin_path, target_name)
     message = []
 
-    command = r'mv \"{}\" \"{}\"'.format(source_path, recycle_bin_target_path)
+    # command = r'mv \"{}\" \"{}\"'.format(source_path, recycle_bin_target_path) # 原本是移动
+    command = r'rm -r \"{}\"'.format(source_path)  # 现在改成删除
     at_command = 'echo "{}" | at now +21 days'.format(command)
     p = subprocess.Popen(at_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     p.wait()
@@ -46,7 +47,7 @@ def gen_at_job(name, category, org_folder_path) ->str:
     p.wait()
     message.append(f'即时复制执行信息:\n{p.stdout.read().decode()}')
 
-    return '\n'.join(message).replace("'",' ')
+    return '\n'.join(message).replace("'", ' ')
 
 
 if __name__ == '__main__':
