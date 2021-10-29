@@ -37,7 +37,7 @@ def gen_at_job(name, category, org_folder_path) -> str:
 
     # command = r'mv \"{}\" \"{}\"'.format(source_path, recycle_bin_target_path) # 原本是移动
     command = r'rm -r \"{}\"'.format(source_path)  # 现在改成删除
-    at_command = 'echo "{}" | at now +21 days'.format(command)
+    at_command = 'echo "{}" | at now +14 days'.format(command)
     p = subprocess.Popen(at_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     p.wait()
     message.append(f'at执行信息:\n{p.stderr.read().decode()}')
