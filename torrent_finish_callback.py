@@ -45,7 +45,7 @@ def gen_at_job(name, category, org_folder_path) -> str:
     command = 'cp -r -v "{}" "{}"'.format(source_path, target_path)
     p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     p.wait()
-    message.append(f'即时复制执行信息:\n{p.stdout.read().decode()}')
+    message.append(f'即时复制执行信息:\n{p.stdout.read().decode()}\n{p.stderr.read().decode()}')
 
     return '\n'.join(message).replace("'", ' ')
 
