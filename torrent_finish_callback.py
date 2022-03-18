@@ -6,6 +6,7 @@ import sys
 from messenger import ijingniu_sender
 from qbittrent_api import QbittrentClient
 from torrent_finish_notify import torrent_finish_notify
+from copy_util import recursive_search_source_folder
 
 
 def torrent_finish_callback(_hash):
@@ -42,10 +43,15 @@ def gen_at_job(name, category, org_folder_path) -> str:
     p.wait()
     message.append(f'at执行信息:\n{p.stderr.read().decode()}')
 
-    command = 'cp -r -v "{}" "{}"'.format(source_path, target_path)
-    p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    p.wait()
-    message.append(f'即时复制执行信息:\n{p.stdout.read().decode()}\n{p.stderr.read().decode()}')
+    # command = 'cp -r -v "{}" "{}"'.format(source_path, target_path)
+    # p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # p.wait()
+    # message.append(f'即时复制执行信息:\n{p.stdout.read().decode()}\n{p.stderr.read().decode()}')
+
+    os.mkdir(target_path)
+    cp_msg = recursive_search_source_folder(source_path,target_path)
+    message.append(f'即时复制执行信息:\n')
+    message += cp_msg
 
     return '\n'.join(message).replace("'", ' ')
 
