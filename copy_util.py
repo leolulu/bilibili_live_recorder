@@ -34,7 +34,7 @@ def recursive_search_source_folder(source_folder_path, target_folder_path):
             else:
                 print_("复制成功，校验成功")
 
-    return "\n".join(messages)
+    return messages
 
 
 def copy_file_with_verify(source_path, target_path):

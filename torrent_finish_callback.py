@@ -28,7 +28,7 @@ def torrent_finish_callback(_hash):
 
 
 def gen_at_job(name, category, org_folder_path) -> str:
-    target_folder_path = '/mnt/192.168.123.1/share已完成'
+    target_folder_path = '/mnt/192.168.123.139/share已完成'
     recycle_bin_path = '/mnt/0DB8/share已完成/回收站/'
     source_path = os.path.join(org_folder_path, name)
     target_name = '{}==》{}'.format(category, name)
