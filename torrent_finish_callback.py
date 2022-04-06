@@ -19,8 +19,8 @@ def torrent_finish_callback(_hash):
     save_path = torrent_list[0]['save_path']
     message = None
 
-    if re.search(r"^\d+$", category) or (category in ['hacg']):
-        message = gen_at_job(name, category, save_path)
+    # if re.search(r"^\d+$", category) or (category in ['hacg']):
+    #     message = gen_at_job(name, category, save_path)
 
     api.logout()
 
