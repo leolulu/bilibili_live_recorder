@@ -57,12 +57,15 @@ def search_flv_transform(*folder_paths):
         return
     for folder_path in folder_paths:
         folder_path = os.path.abspath(folder_path)
-        for file_name in os.listdir(folder_path):
-            if not os.path.splitext(file_name)[-1] == '.flv':
-                continue
-            file_abs_file = os.path.join(folder_path, file_name)
-            if video_transform(file_abs_file):
-                os.remove(file_abs_file)
+        try:
+            for file_name in os.listdir(folder_path):
+                if not os.path.splitext(file_name)[-1] == '.flv':
+                    continue
+                file_abs_file = os.path.join(folder_path, file_name)
+                if video_transform(file_abs_file):
+                    os.remove(file_abs_file)
+        except FileNotFoundError as e:
+            print(e, "跳过...")
 
 
 if __name__ == '__main__':
