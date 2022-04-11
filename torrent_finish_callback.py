@@ -48,6 +48,7 @@ def gen_at_job(name, category, source_path) -> str:
     # message.append(f'即时复制执行信息:\n{p.stdout.read().decode()}\n{p.stderr.read().decode()}')
 
     os.mkdir(target_path)
+    subprocess.call(f'chmod 777 "{target_path}"', shell=True)
     cp_msg = recursive_search_source_folder(source_path, target_path)
     message.append(f'即时复制执行信息:\n')
     message += cp_msg
