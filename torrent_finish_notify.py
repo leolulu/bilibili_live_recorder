@@ -21,7 +21,7 @@ def torrent_finish_notify(_hash, addl_msg=None):
     # save_path = os.path.basename(save_path)
     message += f"任务分类:\n[{category}]\n\n任务名称:\n{name}\n\n"
 
-    creation_date = torrent_info['creation_date']
+    creation_date = torrent_info['addition_date']
     creation_date = arrow.get(creation_date, tzinfo='local')
     creation_date_formated = creation_date.format('YYYY-MM-DD HH:mm:ss')
     creation_date_diff = get_time_diff(creation_date)
