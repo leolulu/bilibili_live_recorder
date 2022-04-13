@@ -1,5 +1,6 @@
 import os
 import re
+import shutil
 import subprocess
 import sys
 
@@ -30,7 +31,9 @@ def torrent_finish_callback(_hash):
 def gen_at_job(name, category, source_path) -> str:
     target_folder_path = '/mnt/hdd/qbitDownload/finish'
     recycle_bin_path = '/mnt/0DB8/share已完成/回收站/'
+    tmp_path = '/mnt/hdd/tmp'
     target_name = '{}==》{}'.format(category, name)
+    tmp_path = os.path.join(tmp_path, target_name)
     target_path = os.path.join(target_folder_path, target_name)
     recycle_bin_target_path = os.path.join(recycle_bin_path, target_name)
     message = []
@@ -47,8 +50,9 @@ def gen_at_job(name, category, source_path) -> str:
     # p.wait()
     # message.append(f'即时复制执行信息:\n{p.stdout.read().decode()}\n{p.stderr.read().decode()}')
 
-    os.mkdir(target_path)
-    cp_msg = recursive_search_source_folder(source_path, target_path)
+    os.mkdir(tmp_path)
+    cp_msg = recursive_search_source_folder(source_path, tmp_path)
+    shutil.move(tmp_path, target_folder_path)
     message.append(f'即时复制执行信息:\n')
     message += cp_msg
     try:
