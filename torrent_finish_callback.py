@@ -29,7 +29,7 @@ def torrent_finish_callback(_hash):
 
 
 def gen_at_job(name, category, source_path) -> str:
-    if os.path.isfile:
+    if os.path.isfile(source_path):
         source_path = os.path.dirname(source_path)
     target_folder_path = '/mnt/hdd/qbitDownload/finish'
     recycle_bin_path = '/mnt/0DB8/share已完成/回收站/'
