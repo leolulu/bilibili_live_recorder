@@ -58,7 +58,7 @@ def gen_at_job(name, category, source_path) -> str:
     message.append(f'即时复制执行信息:\n')
     message += cp_msg
     try:
-        subprocess.call(f'chmod 777 "{target_path}"', shell=True)
+        subprocess.call(f'chmod -R 777 "{target_path}"', shell=True)
     except Exception as e:
         message.append(f'赋权失败了:\n')
         message += str(e)
