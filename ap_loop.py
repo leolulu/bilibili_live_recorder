@@ -74,7 +74,7 @@ def print_job(scheduler):
 
 
 # cron_bilibili_take_in = CronTrigger(hour='5')
-cron_search_flv_transform = CronTrigger(hour='4')
+cron_search_flv_transform = CronTrigger(hour='1')
 del_resume_torrent_counter = Counter()
 corn_print_job = CronTrigger(hour='*/3')
 corn_del_empty_folder = CronTrigger(minute='*/5')
