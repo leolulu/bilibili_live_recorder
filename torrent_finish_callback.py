@@ -20,7 +20,7 @@ def torrent_finish_callback(_hash):
     content_path = torrent_list[0]['content_path']
     message = None
 
-    if re.search(r"^\d+$", category) or (category in ['hacg']):
+    if re.search(r"^\d+$", category) or (category in ['hacg', 'movie', 'anime']):
         message = gen_at_job(name, category, content_path)
 
     api.logout()
