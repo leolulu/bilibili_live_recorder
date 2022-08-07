@@ -33,9 +33,9 @@ class QbittrentClient:
             self.base_url = 'http://42.193.43.79:20005'
 
     def login(self):
-        params = {'username': 'btbtbt', 'password': 'btbtbt'}
+        data = {'username': 'btbtbt', 'password': 'btbtbt'}
         url = urljoin(self.base_url, '/api/v2/auth/login')
-        r = requests.get(url, params=params)
+        r = requests.post(url, data=data)
         if r.status_code != 200:
             self._print('登录失败，返回码：{}...'.format(r.status_code))
             return None
