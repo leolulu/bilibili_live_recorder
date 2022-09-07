@@ -3,11 +3,12 @@ import re
 import shutil
 import subprocess
 import sys
+import traceback
 
+from copy_util import recursive_search_source_folder
 from messenger import ijingniu_sender
 from qbittrent_api import QbittrentClient
 from torrent_finish_notify import torrent_finish_notify
-from copy_util import recursive_search_source_folder
 
 
 def torrent_finish_callback(_hash):
@@ -20,12 +21,17 @@ def torrent_finish_callback(_hash):
     content_path = torrent_list[0]['content_path']
     message = None
 
-    if re.search(r"^\d+$", category) or (category in ['hacg', 'movie', 'anime']):
-        message = gen_at_job(name, category, content_path)
+    title = "下载完成"
+    try:
+        if re.search(r"^\d+$", category) or (category in ['hacg', 'movie', 'anime']):
+            message = gen_at_job(name, category, content_path)
+    except Exception as e:
+        message = traceback.format_exc()
+        title = "下载完成但复制失败"
 
     api.logout()
 
-    ijingniu_sender("下载完成", torrent_finish_notify(_hash, message))
+    ijingniu_sender(title, torrent_finish_notify(_hash, message))
 
 
 def gen_at_job(name, category, source_path) -> str:
