@@ -40,7 +40,7 @@ def gen_at_job(name, category, source_path) -> str:
     target_folder_path = '/mnt/hdd/qbitDownload/finish'
     recycle_bin_path = '/mnt/0DB8/share已完成/回收站/'
     tmp_path = '/mnt/hdd/tmp'
-    target_name = '{}==》{}'.format(category, name)
+    target_name = '{}==》{}'.format(category, name.replace('/', ' '))
     tmp_path = os.path.join(tmp_path, target_name)
     target_path = os.path.join(target_folder_path, target_name)
     recycle_bin_target_path = os.path.join(recycle_bin_path, target_name)
