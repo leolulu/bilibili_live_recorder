@@ -23,7 +23,7 @@ def torrent_finish_callback(_hash):
 
     title = "下载完成"
     try:
-        if re.search(r"^\d+$", category) or (category in ['hacg', 'movie', 'anime', 'game', 'horse', 'porn', 'hanime']):
+        if re.search(r"^\d+$", category) or (category in ['hacg', 'movie', 'anime', 'game', 'horse', 'porn', 'hanime', 'book']):
             message = gen_at_job(name, category, content_path)
     except Exception as e:
         message = traceback.format_exc()
